@@ -39,20 +39,17 @@ app.get("/add", (_req: Request, res: Response) => {
  * @param res - Express response object
  * @returns A response object containing the stories from the database
  */
-app.get("/stories", async (req: Request, res: Response) => {
+app.get("/stories", async (req: Request, res: Response): Promise<any> => {
     let search: String = req.query.search?.toString() || "";
     let sort: String = req.query.sort!.toString().toLowerCase();
     let order: boolean = req.query.order!.toString().toLowerCase() === "descending";
     sort = sort === "created" ? "created_at" : sort === "modified" ? "updated_at" : sort;
     let dbRes: Story[] = await getStoriesData(search, sort, order);
+    
     res.writeHead(200, {
       'Content-Type': 'application/json'
     });
     res.end(JSON.stringify(dbRes));
 });
 
-app.listen(PORT, () => {
-    console.log("Server running at PORT: ", PORT); 
-}).on("error", (error) => {
-  throw new Error(error.message);
-})
+module.exports = app;

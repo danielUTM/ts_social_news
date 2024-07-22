@@ -10,7 +10,7 @@ function read_in_query(file: String): String {
 const GET_STORIES_QUERY = read_in_query("get_stories.sql");
 
 export interface Story {
-  id: string;
+  id: number;
   title: string;
   url: string;
   created_at: Date;

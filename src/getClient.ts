@@ -1,8 +1,11 @@
 const { Client } = require('pg');
+import dotenv from "dotenv"
+dotenv.config();
+const USERNAME = process.env.USERNAME;
 
 module.exports.getClient = async () => {
   const client = new Client({
-	    user: 'danielcampbell',
+	    user: USERNAME,
 	    password: 'password',
 	    host: 'localhost',
 	    port: 5432,
