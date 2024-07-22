@@ -1,5 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const request = require("supertest");
 import { app } from "../src/app";
-import { request } from "supertest";
 import * as sql from "../src/sqlMethods";
 
 describe('testing stories route in app file', () => {
