@@ -1,9 +1,6 @@
-const app = require("../src/app");
-const request = require("supertest");
-import {
-  Story,
-} from "../src/sqlMethods";
-const sql = require("../src/sqlMethods");
+import { app } from "../src/app";
+import { request } from "supertest";
+import * as sql from "../src/sqlMethods";
 
 describe('testing stories route in app file', () => {
   it("root endpoint returns 200", async () => {
@@ -12,14 +9,14 @@ describe('testing stories route in app file', () => {
   })
 
   it("stories endpoint returns 200", async () => {
-    let fields: String[] = ["created_at", "id", "score", "title", "updated_at", "url"]
-    let returnValue: Story[] = [{"created_at": new Date(500000000000),
+    const fields: string[] = ["created_at", "id", "score", "title", "updated_at", "url"]
+    const returnValue: sql.Story[] = [{"created_at": new Date(500000000000),
                              "id": 1,
                               "title": "1",
                               "updated_at": new Date(500000000000),
                               "url": "1"}]
-    const spy = jest.spyOn(sql, "getStoriesData");
-    spy.mockReturnValue(returnValue);
+    const mock = jest.spyOn(sql, "getStoriesData");
+    mock.mockReturnValue(new Promise((resolve) => resolve(returnValue)));
 
     const res = await request(app).get("/stories?sort=title&order=ascending&search=aukus");
     res._body[0].updated_at = new Date(res._body[0].updated_at);
@@ -27,9 +24,9 @@ describe('testing stories route in app file', () => {
 
     expect(res.statusCode).toEqual(200);
     expect(res._body).toEqual(returnValue);
-    expect(spy).toHaveBeenCalled();
-    for (let field of fields) {
-      expect(res._body[0].hasOwnProperty(field));
+    expect(mock).toHaveBeenCalled();
+    for (const field of fields) {
+      expect(Object.prototype.hasOwnProperty.call(res._body[0], field));
     }
   });
 });

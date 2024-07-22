@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Client } = require('pg');
 import dotenv from "dotenv"
 dotenv.config();

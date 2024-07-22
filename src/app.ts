@@ -1,10 +1,8 @@
 import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv"
 import { getStoriesData, Story}  from "./sqlMethods"
 
-const app: Express = express();
-dotenv.config();
-const PORT = process.env.PORT;
+export const app: Express = express();
+
 
 app.use(express.static('static'),
   express.json());
@@ -39,17 +37,15 @@ app.get("/add", (_req: Request, res: Response) => {
  * @param res - Express response object
  * @returns A response object containing the stories from the database
  */
-app.get("/stories", async (req: Request, res: Response): Promise<any> => {
-    let search: String = req.query.search?.toString() || "";
-    let sort: String = req.query.sort!.toString().toLowerCase();
-    let order: boolean = req.query.order!.toString().toLowerCase() === "descending";
+app.get("/stories", async (req: Request, res: Response) => {
+    const search: string = req.query.search?.toString() || "";
+    const order: boolean = req.query.order!.toString().toLowerCase() === "descending";
+    let sort: string = req.query.sort!.toString().toLowerCase();
     sort = sort === "created" ? "created_at" : sort === "modified" ? "updated_at" : sort;
-    let dbRes: Story[] = await getStoriesData(search, sort, order);
+    const dbRes: Story[] = await getStoriesData(search, sort, order);
     
     res.writeHead(200, {
       'Content-Type': 'application/json'
     });
     res.end(JSON.stringify(dbRes));
 });
-
-module.exports = app;
